@@ -1,0 +1,5 @@
+Model–view–controller (MVC), it's annoying.
+
+Why are we separating model and controller when they can be combined perfectly? Here's the idea, we're converting OOP into conventional model, but separating the "V" and the others, isn't it much more clear?
+
+Also, the core of VectorPHP is "functions", so you don't have to $abc->xyz() anymore, just _xyz(), and you're rock.
