@@ -77,7 +77,59 @@ class myDB {
 		return $resource;
 	}
 	
-	public function fetch($sql, $expire = NULL) {		
+	public function parse($action, $table, $params) {
+		switch (strtolower($action)) {
+			case 'insert':
+				foreach ($params as $key => $value) {
+					$keys .= '`'.$key.'`, ';
+					
+					if ($value !== NULL) $values .= '\''.$value.'\', ';
+					else $values .= '\'\', ';
+				}
+				$keys = rtrim($keys, ', ');
+				$values = rtrim($values, ', ');
+				$sql = "insert into `$table` ($keys) values ($values)";
+				break;
+			case 'select':
+				foreach($params as $select => $param) {
+					if ( (strlen($select) === 1 and $select == '*') or (strpos($select, '(') !== false) ) {
+						$keys = $select;
+					}else{
+						$_keys = explode(',', trim($select));
+						foreach($_keys as $single) {
+							$keys .= '`'.trim($single).'`, ';
+						}
+						$keys = rtrim($keys, ', ');
+					}
+					if (isset($param['where'])) {
+						$_sql = ' where ';
+						foreach ($param['where'] as $key => $value) {
+							if ($value !== NULL) $_value .= '\''.$value.'\'';
+							else $_value .= '\'\'';
+							$_sql .= '`'.$key.'` = '.$_value.' and ';
+							unset($_value);
+						}
+						$_sql = rtrim($_sql, ' and ');
+					}
+					if (isset($param['order'])) {
+						foreach($param['order'] as $key => $method) {
+							$_sql .= " order by `$key` $method";
+						}
+					}
+					if (isset($param['limit'])) {
+						$_sql .= ' limit '.$param['limit'];
+					}
+					$sql = "select $keys from `$table`".$_sql;
+				}
+				break;
+			default:
+				$sql = '';
+				break;
+		}
+		return $sql;
+	}
+	
+	public function fetch($sql, $expire = NULL) {
 		if ($this->cache === true) $result = $this->get_cache($sql); else $result = false;
 		if ($result === false) {
 			$resource = $this->query($sql);
