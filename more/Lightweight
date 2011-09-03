@@ -1,0 +1,8 @@
+As for the development of Sep. 3 2011, VectorPHP has total of 509 lines of code.
+
+Less code, meaning higher performance. I'm not kidding. Here are the performance graphs using xhprof:
+
+Table: xx
+Graph: xx
+
+Running pure framework, no bullshit.
