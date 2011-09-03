@@ -2,7 +2,7 @@
 
 require 'o_load.php';
 
-$router = url_router();
+$router = _urlRouter();
 
 /*
 
