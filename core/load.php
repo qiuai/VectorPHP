@@ -6,7 +6,7 @@ $router = _urlRouter();
 
 /*
 
-Rewrite for url_router()
+Rewrite for _urlRouter()
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
