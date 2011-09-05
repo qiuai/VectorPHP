@@ -9,7 +9,7 @@ class Session_Signature {
 	}
 	
 	private function _generateSignature() {
-		return md5($_SERVER["HTTP_HOST"].$_SERVER["HTTP_USER_AGENT"].$_SERVER["REMOTE_ADDR"]);
+		return md5($_SERVER["HTTP_HOST"].$_SERVER["HTTP_USER_AGENT"].$this->getRealIpAddr());
 	}
 	
 	public function registerFuncOnDestroy($name) {
@@ -29,6 +29,17 @@ class Session_Signature {
 			return false;
 		}
 		return true;
+	}
+	
+	private function getRealIpAddr() {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return $ip;
 	}
 
 }
